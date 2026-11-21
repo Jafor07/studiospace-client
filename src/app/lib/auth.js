@@ -12,6 +12,15 @@ export const auth = betterAuth({
   }),
   emailAndPassword: {
     enabled: true,
+    // The assignment says "at least 6 characters" (BetterAuth's default is 8)
+    minPasswordLength: 6,
+  },
+  // "Continue with Google" button on the Login and Register pages
+  socialProviders: {
+    google: {
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    },
   },
 
   plugins: [jwt()],

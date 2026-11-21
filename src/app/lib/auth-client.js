@@ -1,7 +1,8 @@
 import { jwtClient } from "better-auth/client/plugins";
 import { createAuthClient } from "better-auth/react";
+
+// No baseURL on purpose: the browser talks to the same site it was loaded
+// from, so this works on localhost and on Vercel without any change.
 export const authClient = createAuthClient({
-  /** The base URL of the server (optional if you're using the same domain) */
-  baseURL: process.env.BETTER_AUTH_URL || "http://localhost:3000",
   plugins: [jwtClient()],
 });

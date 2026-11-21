@@ -1,2 +1,74 @@
 @import "tailwindcss";
 @plugin "daisyui";
+
+/* StudioSpace light theme: warm studio white with a spotlight amber */
+@plugin "daisyui/theme" {
+  name: "studio-light";
+  default: true;
+  prefersdark: false;
+  color-scheme: light;
+  --color-base-100: oklch(98.5% 0.004 85);
+  --color-base-200: oklch(96% 0.007 85);
+  --color-base-300: oklch(91% 0.012 85);
+  --color-base-content: oklch(24% 0.02 60);
+  --color-primary: oklch(72% 0.17 62);
+  --color-primary-content: oklch(20% 0.04 60);
+  --color-secondary: oklch(42% 0.15 275);
+  --color-secondary-content: oklch(97% 0.01 275);
+  --color-accent: oklch(66% 0.13 195);
+  --color-accent-content: oklch(18% 0.03 195);
+  --color-neutral: oklch(25% 0.02 60);
+  --color-neutral-content: oklch(95% 0.005 85);
+  --color-info: oklch(68% 0.13 240);
+  --color-info-content: oklch(18% 0.03 240);
+  --color-success: oklch(70% 0.15 155);
+  --color-success-content: oklch(18% 0.04 155);
+  --color-warning: oklch(82% 0.15 85);
+  --color-warning-content: oklch(22% 0.05 85);
+  --color-error: oklch(63% 0.2 25);
+  --color-error-content: oklch(97% 0.01 25);
+  --radius-selector: 1rem;
+  --radius-field: 0.5rem;
+  --radius-box: 0.75rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 1;
+  --noise: 0;
+}
+
+/* StudioSpace dark theme: dark control room with the same amber spotlight */
+@plugin "daisyui/theme" {
+  name: "studio-dark";
+  default: false;
+  prefersdark: false;
+  color-scheme: dark;
+  --color-base-100: oklch(21% 0.015 60);
+  --color-base-200: oklch(18% 0.015 60);
+  --color-base-300: oklch(14% 0.012 60);
+  --color-base-content: oklch(94% 0.01 85);
+  --color-primary: oklch(78% 0.16 70);
+  --color-primary-content: oklch(20% 0.04 60);
+  --color-secondary: oklch(68% 0.14 275);
+  --color-secondary-content: oklch(16% 0.03 275);
+  --color-accent: oklch(72% 0.13 195);
+  --color-accent-content: oklch(16% 0.03 195);
+  --color-neutral: oklch(30% 0.02 60);
+  --color-neutral-content: oklch(94% 0.01 85);
+  --color-info: oklch(72% 0.13 240);
+  --color-info-content: oklch(16% 0.03 240);
+  --color-success: oklch(74% 0.15 155);
+  --color-success-content: oklch(16% 0.04 155);
+  --color-warning: oklch(84% 0.15 85);
+  --color-warning-content: oklch(22% 0.05 85);
+  --color-error: oklch(68% 0.19 25);
+  --color-error-content: oklch(16% 0.04 25);
+  --radius-selector: 1rem;
+  --radius-field: 0.5rem;
+  --radius-box: 0.75rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 1;
+  --noise: 0;
+}

@@ -1,19 +1,28 @@
 import { NextResponse } from "next/server";
-import { headers } from "next/headers";
 import { auth } from "@/app/lib/auth";
 
-// This function can be marked `async` if using `await` inside
+// Runs before every private page below. A visitor without a session is sent
+// to /login and brought back to the page they wanted after logging in.
 export async function proxy(request) {
   const session = await auth.api.getSession({
-    headers: await headers(),
+    headers: request.headers,
   });
-  console.log("Session in proxy:", session);
-  const user = session?.user;
-  if (!user) {
-    return NextResponse.redirect(new URL("/login", request.url));
+
+  if (!session?.user) {
+    const loginUrl = new URL("/login", request.url);
+    loginUrl.searchParams.set("redirect", request.nextUrl.pathname);
+    return NextResponse.redirect(loginUrl);
   }
+
+  return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/get-data"],
+  matcher: [
+    "/dashboard/:path*",
+    "/add-studio",
+    "/my-listings",
+    "/my-bookings",
+    "/studios/edit/:path*",
+  ],
 };

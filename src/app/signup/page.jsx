@@ -1,237 +1,240 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { authClient } from "../lib/auth-client";
+import toast from "react-hot-toast";
+import { LuAperture, LuCheck, LuCircle, LuEye, LuEyeOff } from "react-icons/lu";
+import { authClient } from "@/app/lib/auth-client";
+import GoogleButton from "@/components/GoogleButton";
 
-const SignUpPage = () => {
+// The three password rules from the assignment
+const passwordRules = [
+  {
+    id: "length",
+    label: "At least 6 characters",
+    error: "Password must be at least 6 characters long.",
+    test: (value) => value.length >= 6,
+  },
+  {
+    id: "upper",
+    label: "One uppercase letter (A-Z)",
+    error: "Password must have an uppercase letter.",
+    test: (value) => /[A-Z]/.test(value),
+  },
+  {
+    id: "lower",
+    label: "One lowercase letter (a-z)",
+    error: "Password must have a lowercase letter.",
+    test: (value) => /[a-z]/.test(value),
+  },
+];
+
+export default function SignUpPage() {
   const router = useRouter();
 
+  const [password, setPassword] = useState("");
+  const [photoUrl, setPhotoUrl] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [imageUrl, setImageUrl] = useState("");
+  const [photoFailed, setPhotoFailed] = useState(false);
+  const [passwordError, setPasswordError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
 
   const handleSignUp = async (e) => {
     e.preventDefault();
 
+    const formData = new FormData(e.currentTarget);
+    const name = formData.get("name").trim();
+    const email = formData.get("email").trim();
+
+    // 1. Check the password rules before talking to the server
+    const brokenRule = passwordRules.find((rule) => !rule.test(password));
+    if (brokenRule) {
+      setPasswordError(brokenRule.error);
+      toast.error(brokenRule.error);
+      return;
+    }
+
     setLoading(true);
-    setErrorMessage("");
-
-    const form = e.target;
-
-    const name = form.name.value;
-    const email = form.email.value;
-    const password = form.password.value;
-    const image = form.image.value;
-
     try {
-      const { data, error } = await authClient.signUp.email({
+      const { error } = await authClient.signUp.email({
         name,
         email,
         password,
-        image,
+        image: photoUrl.trim() || undefined,
       });
 
       if (error) {
-        setErrorMessage(error.message);
+        toast.error(error.message || "Registration failed. Please try again.");
         return;
       }
 
-      console.log("Signup Successful:", data);
+      // BetterAuth logs the new user in automatically. The assignment wants
+      // the user to land on the Login page, so we log them out again first.
+      await authClient.signOut();
 
-      router.push("/");
-      router.refresh();
-    } catch (error) {
-      setErrorMessage("Something went wrong. Please try again.");
-      console.error(error);
+      toast.success("Account created! Please log in.");
+      router.push("/login");
+    } catch (err) {
+      console.error("Register error:", err);
+      toast.error("Something went wrong. Please try again.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 px-4 py-12">
-      <div className="grid w-full max-w-5xl overflow-hidden rounded-3xl border border-slate-800 bg-slate-900 shadow-2xl">
-        {/* Left Side */}
-        <div className="hidden flex-col justify-center bg-gradient-to-br from-indigo-600 to-purple-700 p-12 md:flex">
-          <span className="mb-6 text-sm font-semibold uppercase tracking-widest text-indigo-200">
-            Assignment 08
-          </span>
-
-          <h1 className="text-4xl font-extrabold leading-tight text-white">
-            Start Your Journey With Us!
-          </h1>
-
-          <p className="mt-6 leading-8 text-indigo-100">
-            Create your account and explore our session project. Keep learning,
-            keep building, and keep improving.
-          </p>
-
-          <div className="mt-12 rounded-2xl border border-white/20 bg-white/10 p-6">
-            <p className="text-lg font-semibold text-white">
-              "Learning Today, Building Tomorrow."
-            </p>
-
-            <p className="mt-2 text-sm text-indigo-200">
-              Assignment 08 Session Project
-            </p>
-          </div>
-        </div>
-
-        {/* Right Side */}
-        <div className="p-6 sm:p-10 md:p-12">
-          <div className="mb-8">
-            <Link
-              href="/"
-              className="text-sm font-medium text-indigo-400 hover:text-indigo-300"
-            >
-              ← Back to Home
-            </Link>
-
-            <h2 className="mt-6 text-3xl font-bold text-white">
-              Create Account
-            </h2>
-
-            <p className="mt-2 text-sm text-slate-400">
-              Fill in your information to get started.
+    <main className="flex min-h-[85vh] items-center justify-center bg-base-200 px-4 py-12">
+      <div className="card w-full max-w-md border border-base-300 bg-base-100 shadow-xl">
+        <div className="card-body gap-6">
+          {/* Heading */}
+          <div className="text-center">
+            <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-primary text-primary-content">
+              <LuAperture size={26} />
+            </div>
+            <h1 className="text-2xl font-bold">Create your account</h1>
+            <p className="mt-1 text-sm text-base-content/70">
+              Join StudioSpace to book creative studios or host your own.
             </p>
           </div>
 
-          <form onSubmit={handleSignUp} className="space-y-5">
+          <form onSubmit={handleSignUp} className="space-y-4">
             {/* Name */}
-            <div>
-              <label className="mb-2 block text-sm font-medium text-slate-300">
-                Full Name
-              </label>
-
+            <fieldset className="fieldset">
+              <legend className="fieldset-legend">Full name</legend>
               <input
                 type="text"
                 name="name"
-                placeholder="Enter your full name"
+                placeholder="Your full name"
+                autoComplete="name"
                 required
-                className="w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-3 text-white outline-none transition placeholder:text-slate-500 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
+                className="input w-full"
               />
-            </div>
+            </fieldset>
 
             {/* Email */}
-            <div>
-              <label className="mb-2 block text-sm font-medium text-slate-300">
-                Email Address
-              </label>
-
+            <fieldset className="fieldset">
+              <legend className="fieldset-legend">Email address</legend>
               <input
                 type="email"
                 name="email"
-                placeholder="example@gmail.com"
+                placeholder="you@example.com"
+                autoComplete="email"
                 required
-                className="w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-3 text-white outline-none transition placeholder:text-slate-500 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
+                className="input w-full"
               />
-            </div>
+            </fieldset>
+
+            {/* Photo URL */}
+            <fieldset className="fieldset">
+              <legend className="fieldset-legend">Photo URL</legend>
+              <input
+                type="url"
+                name="photo"
+                placeholder="https://i.ibb.co/your-photo.jpg"
+                value={photoUrl}
+                onChange={(e) => {
+                  setPhotoUrl(e.target.value);
+                  setPhotoFailed(false);
+                }}
+                className="input w-full"
+              />
+              {photoUrl && !photoFailed && (
+                <div className="mt-2 flex items-center gap-3">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={photoUrl}
+                    alt="Profile preview"
+                    onError={() => setPhotoFailed(true)}
+                    className="h-12 w-12 rounded-full border-2 border-primary object-cover"
+                  />
+                  <span className="text-xs text-base-content/70">
+                    Profile photo preview
+                  </span>
+                </div>
+              )}
+            </fieldset>
 
             {/* Password */}
-            <div>
-              <label className="mb-2 block text-sm font-medium text-slate-300">
-                Password
-              </label>
-
+            <fieldset className="fieldset">
+              <legend className="fieldset-legend">Password</legend>
               <div className="relative">
                 <input
                   type={showPassword ? "text" : "password"}
                   name="password"
-                  placeholder="Enter your password"
-                  minLength={8}
-                  maxLength={128}
+                  placeholder="Create a password"
+                  autoComplete="new-password"
+                  value={password}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                    setPasswordError("");
+                  }}
                   required
-                  className="w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-3 pr-20 text-white outline-none transition placeholder:text-slate-500 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
+                  className="input w-full pr-12"
                 />
-
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-sm font-medium text-indigo-400 hover:text-indigo-300"
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-base-content/60 hover:text-base-content"
                 >
-                  {showPassword ? "Hide" : "Show"}
+                  {showPassword ? <LuEyeOff size={18} /> : <LuEye size={18} />}
                 </button>
               </div>
-            </div>
 
-            {/* Image URL */}
-            <div>
-              <label className="mb-2 block text-sm font-medium text-slate-300">
-                Profile Image URL
-              </label>
+              {/* Live checklist */}
+              <ul className="mt-2 space-y-1 text-xs">
+                {passwordRules.map((rule) => {
+                  const passed = rule.test(password);
+                  return (
+                    <li
+                      key={rule.id}
+                      className={`flex items-center gap-2 ${
+                        passed ? "text-success" : "text-base-content/60"
+                      }`}
+                    >
+                      {passed ? <LuCheck size={14} /> : <LuCircle size={14} />}
+                      {rule.label}
+                    </li>
+                  );
+                })}
+              </ul>
 
-              <input
-                type="url"
-                name="image"
-                placeholder="https://example.com/image.jpg"
-                value={imageUrl}
-                onChange={(e) => setImageUrl(e.target.value)}
-                required
-                className="w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-3 text-white outline-none transition placeholder:text-slate-500 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
-              />
-
-              <p className="mt-2 text-xs text-slate-500">
-                Upload your image to ImgBB or Cloudinary and paste the URL.
-              </p>
-
-              {/* Image Preview */}
-              {imageUrl && (
-                <div className="mt-4 flex items-center gap-4 rounded-xl border border-slate-700 bg-slate-800 p-3">
-                  <img
-                    src={imageUrl}
-                    alt="Profile Preview"
-                    onError={(e) => {
-                      e.currentTarget.style.display = "none";
-                    }}
-                    className="h-16 w-16 rounded-full border-2 border-indigo-500 object-cover"
-                  />
-
-                  <div>
-                    <p className="text-sm font-medium text-white">
-                      Image Preview
-                    </p>
-                    <p className="text-xs text-slate-400">
-                      Your profile picture
-                    </p>
-                  </div>
-                </div>
+              {passwordError && (
+                <p role="alert" className="mt-1 text-sm text-error">
+                  {passwordError}
+                </p>
               )}
-            </div>
+            </fieldset>
 
-            {/* Error Message */}
-            {errorMessage && (
-              <div className="rounded-lg border border-red-500/20 bg-red-500/10 p-3 text-sm text-red-400">
-                {errorMessage}
-              </div>
-            )}
-
-            {/* Submit Button */}
             <button
               type="submit"
               disabled={loading}
-              className="w-full rounded-xl bg-indigo-600 py-3.5 font-semibold text-white shadow-lg shadow-indigo-600/20 transition hover:bg-indigo-500 disabled:cursor-not-allowed disabled:opacity-60"
+              className="btn btn-primary w-full"
             >
-              {loading ? "Creating Account..." : "Create Account →"}
+              {loading ? (
+                <>
+                  <span className="loading loading-spinner loading-sm" />
+                  Creating account...
+                </>
+              ) : (
+                "Register"
+              )}
             </button>
           </form>
 
-          {/* Login Link */}
-          <p className="mt-8 text-center text-sm text-slate-400">
+          <div className="divider my-0 text-xs text-base-content/60">OR</div>
+
+          <GoogleButton callbackURL="/" />
+
+          <p className="text-center text-sm text-base-content/70">
             Already have an account?{" "}
-            <Link
-              href="/login"
-              className="font-semibold text-indigo-400 transition hover:text-indigo-300"
-            >
-              Login Now
+            <Link href="/login" className="link link-primary font-semibold">
+              Log in
             </Link>
           </p>
         </div>
       </div>
     </main>
   );
-};
-
-export default SignUpPage;
+}
