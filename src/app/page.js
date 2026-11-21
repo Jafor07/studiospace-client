@@ -1,10 +1,41 @@
+import { Suspense } from "react";
+import HeroSlider from "@/components/home/HeroSlider";
+import CategoryGrid from "@/components/home/CategoryGrid";
+import FeaturedStudios from "@/components/home/FeaturedStudios";
+import HowBookingWorks from "@/components/home/HowBookingWorks";
+import HostGuarantee from "@/components/home/HostGuarantee";
+import SectionHeading from "@/components/ui/SectionHeading";
+import { StudioGridSkeleton } from "@/components/ui/Skeletons";
+
 export default function HomePage() {
   return (
-    <main className="mx-auto max-w-3xl px-4 py-24 text-center">
-      <h1 className="text-4xl font-extrabold">StudioSpace</h1>
-      <p className="mt-3 text-base-content/70">
-        The full home page arrives in Step 7.
-      </p>
+    <main>
+      <HeroSlider />
+
+      <section className="mx-auto max-w-7xl px-4 py-20">
+        <SectionHeading
+          eyebrow="Featured studios"
+          title="Top-rated spaces to create in"
+          subtitle="Hand-picked rooms with the best reviews from the creators who booked them."
+        />
+        <Suspense fallback={<StudioGridSkeleton count={6} />}>
+          <FeaturedStudios />
+        </Suspense>
+      </section>
+
+      <section className="bg-base-200 py-20">
+        <div className="mx-auto max-w-7xl px-4">
+          <SectionHeading
+            eyebrow="Browse by category"
+            title="What are you making today?"
+            subtitle="Choose a type of space and we’ll show you everything available."
+          />
+          <CategoryGrid />
+        </div>
+      </section>
+
+      <HowBookingWorks />
+      <HostGuarantee />
     </main>
   );
 }
