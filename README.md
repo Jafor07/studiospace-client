@@ -3,8 +3,9 @@
 **Peer-to-peer creative workspace and production studio sharing platform.**
 Studio owners list photo studios, sound stages, podcast lounges, music suites and art workshops. Creators discover them, check pricing, and book hourly slots.
 
-**Live site:** https://YOUR-CLIENT-NAME.vercel.app
-**Server repository:** https://github.com/YOUR_USERNAME/studiospace-server
+**Live site:** Not deployed yet — deploy the client and replace this line with its live URL before submission.
+**Client repository:** https://github.com/Jafor07/studiospace-client
+**Server repository:** https://github.com/Jafor07/studiospace-server
 
 ## Features
 
@@ -36,13 +37,16 @@ Studio owners list photo studios, sound stages, podcast lounges, music suites an
 
 ## Run it locally
 
-1. Clone this repo and the [server repo](https://github.com/YOUR_USERNAME/studiospace-server).
+1. Clone this repo and the [server repo](https://github.com/Jafor07/studiospace-server).
 2. In this folder: `npm install`
-3. Copy `.env.example` to `.env.local` and fill in every value (MongoDB URI, a random `BETTER_AUTH_SECRET`, Google keys).
-4. Start the server (see its README), then run `npm run dev` here.
-5. Open http://localhost:3000
+3. Copy `.env.example` to `.env.local` and fill in the MongoDB URI, a long random `BETTER_AUTH_SECRET`, and Google OAuth keys.
+4. Set `NEXT_PUBLIC_IMGBB_API_KEY` in `.env.local` to enable photo uploads. Without it, users can still enter an image URL manually.
+5. Start the server (see its README), then run `npm run dev` here.
+6. Open http://localhost:3000
 
 ## Examiner test accounts
+
+These accounts are not created automatically. Before evaluation, register both through the deployed app (or ensure they exist in its BetterAuth database). Then run `npm run seed -- host@studiospace.com "Studio Host"` from the server folder so the sample listings belong to the host account.
 
 | Role | Email | Password |
 |---|---|---|

@@ -241,24 +241,37 @@ export default function StudioForm({ mode, studio, host }) {
               placeholder="https://i.ibb.co/your-studio-photo.jpg"
               className="input w-full"
             />
-            {IMGBB_KEY && (
-              <label className={`btn btn-outline shrink-0 ${uploading ? "btn-disabled" : ""}`}>
-                {uploading ? (
-                  <span className="loading loading-spinner loading-sm" />
-                ) : (
-                  <LuUpload size={18} />
-                )}
-                Upload photo
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleUpload}
-                  disabled={uploading}
-                  className="hidden"
-                />
-              </label>
-            )}
+            <label
+              className={`btn btn-outline shrink-0 ${
+                uploading || !IMGBB_KEY ? "btn-disabled" : ""
+              }`}
+              title={
+                IMGBB_KEY
+                  ? undefined
+                  : "Set NEXT_PUBLIC_IMGBB_API_KEY in .env.local to enable uploads."
+              }
+            >
+              {uploading ? (
+                <span className="loading loading-spinner loading-sm" />
+              ) : (
+                <LuUpload size={18} />
+              )}
+              Upload photo
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleUpload}
+                disabled={uploading || !IMGBB_KEY}
+                className="hidden"
+              />
+            </label>
           </div>
+          {!IMGBB_KEY && (
+            <p className="text-xs text-warning">
+              Image uploads are disabled until NEXT_PUBLIC_IMGBB_API_KEY is set.
+              You can still enter an image URL.
+            </p>
+          )}
           {form.image && (
             <div className="mt-3 aspect-[16/9] max-w-xs overflow-hidden rounded-box border border-base-300">
               <StudioImage
