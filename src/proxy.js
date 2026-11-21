@@ -23,6 +23,7 @@ export const config = {
     "/add-studio",
     "/my-listings",
     "/my-bookings",
+    "/saved",
     "/studios/edit/:path*",
   ],
 };
