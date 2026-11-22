@@ -38,6 +38,7 @@ export default function SignUpPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [photoFailed, setPhotoFailed] = useState(false);
   const [passwordError, setPasswordError] = useState("");
+  const [photoError, setPhotoError] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleSignUp = async (e) => {
@@ -55,13 +56,23 @@ export default function SignUpPage() {
       return;
     }
 
+    // 2. The photo must be a normal web link (not pasted image data)
+    const photo = photoUrl.trim();
+    if (photo && !/^https?:\/\/\S+$/i.test(photo)) {
+      const message =
+        "Photo URL must be a normal link that starts with http:// or https://";
+      setPhotoError(message);
+      toast.error(message);
+      return;
+    }
+
     setLoading(true);
     try {
       const { error } = await authClient.signUp.email({
         name,
         email,
         password,
-        image: photoUrl.trim() || undefined,
+        image: photo || undefined,
       });
 
       if (error) {
@@ -133,12 +144,19 @@ export default function SignUpPage() {
                 name="photo"
                 placeholder="https://i.ibb.co/your-photo.jpg"
                 value={photoUrl}
+                maxLength={500}
                 onChange={(e) => {
                   setPhotoUrl(e.target.value);
                   setPhotoFailed(false);
+                  setPhotoError("");
                 }}
                 className="input w-full"
               />
+              {photoError && (
+                <p role="alert" className="mt-1 text-sm text-error">
+                  {photoError}
+                </p>
+              )}
               {photoUrl && !photoFailed && (
                 <div className="mt-2 flex items-center gap-3">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
