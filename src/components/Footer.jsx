@@ -90,7 +90,18 @@ export default function Footer() {
 
       <div className="border-t border-base-300">
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 px-4 py-5 text-xs text-base-content/60 sm:flex-row">
-          <p>© {new Date().getFullYear()} StudioSpace. All rights reserved.</p>
+          <p>
+            © {new Date().getFullYear()} StudioSpace. All rights reserved. Studio photos from{" "}
+            <a
+              href="https://www.pexels.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline hover:text-primary"
+            >
+              Pexels
+            </a>
+            .
+          </p>
           <p>By using StudioSpace you agree to our Terms of Service and Privacy Policy.</p>
         </div>
       </div>

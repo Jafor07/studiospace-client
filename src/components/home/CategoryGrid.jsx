@@ -9,11 +9,11 @@ export default function CategoryGrid() {
         <Link
           key={category.value}
           href={`/studios?category=${encodeURIComponent(category.value)}`}
-          className="group relative flex h-64 flex-col justify-end overflow-hidden rounded-box border border-base-300 text-white"
+          className="group relative flex h-64 flex-col justify-end overflow-hidden rounded-box border border-base-300 bg-neutral text-white"
         >
           <div
             className="absolute inset-0 bg-cover bg-center transition duration-500 group-hover:scale-110"
-            style={{ backgroundImage: `url(${category.art})` }}
+            style={{ backgroundImage: `url(${category.art}), url(${category.fallback})` }}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-transparent" />
           <div className="relative p-4">

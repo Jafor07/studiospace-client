@@ -6,6 +6,7 @@ import {
   LuPalette,
 } from "react-icons/lu";
 
+// Photos are free to use from Pexels. "fallback" is our own illustration, shown if a photo fails to load.
 // "value" is what is saved in MongoDB. "label" is what visitors read.
 export const CATEGORIES = [
   {
@@ -13,35 +14,40 @@ export const CATEGORIES = [
     label: "Photo Studios",
     blurb: "Cyc walls, daylight and strobe-ready sets",
     icon: LuCamera,
-    art: "/studios/photo-a.svg",
+    art: "https://images.pexels.com/photos/4123848/pexels-photo-4123848.jpeg?auto=compress&cs=tinysrgb&w=900",
+    fallback: "/studios/photo-a.svg",
   },
   {
     value: "Film Stage",
     label: "Sound Stages",
     blurb: "Big floors, lighting grids and blackout walls",
     icon: LuClapperboard,
-    art: "/studios/film-a.svg",
+    art: "https://images.pexels.com/photos/6621416/pexels-photo-6621416.jpeg?auto=compress&cs=tinysrgb&w=900",
+    fallback: "/studios/film-a.svg",
   },
   {
     value: "Podcast Lounge",
     label: "Podcast Rooms",
     blurb: "Treated rooms with broadcast-ready mics",
     icon: LuMic,
-    art: "/studios/podcast-a.svg",
+    art: "https://images.pexels.com/photos/7450049/pexels-photo-7450049.jpeg?auto=compress&cs=tinysrgb&w=900",
+    fallback: "/studios/podcast-a.svg",
   },
   {
     value: "Music Suite",
     label: "Music Suites",
     blurb: "Control rooms, live rooms and monitors",
     icon: LuMusic,
-    art: "/studios/music-a.svg",
+    art: "https://images.pexels.com/photos/7087606/pexels-photo-7087606.jpeg?auto=compress&cs=tinysrgb&w=900",
+    fallback: "/studios/music-a.svg",
   },
   {
     value: "Workshop",
     label: "Art Workshops",
     blurb: "Easels, benches and bright working light",
     icon: LuPalette,
-    art: "/studios/workshop-a.svg",
+    art: "https://images.pexels.com/photos/8191551/pexels-photo-8191551.jpeg?auto=compress&cs=tinysrgb&w=900",
+    fallback: "/studios/workshop-a.svg",
   },
 ];
 

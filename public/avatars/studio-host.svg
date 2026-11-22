@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Studio host avatar">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fbbf24"/><stop offset="1" stop-color="#f59e0b"/></linearGradient>
+    <clipPath id="round"><circle cx="100" cy="100" r="100"/></clipPath>
+  </defs>
+  <g clip-path="url(#round)">
+    <rect width="200" height="200" fill="url(#bg)"/>
+    <circle cx="100" cy="82" r="34" fill="#2a2018"/>
+    <path d="M28 200 C28 150 62 124 100 124 C138 124 172 150 172 200Z" fill="#2a2018"/>
+    <circle cx="100" cy="84" r="30" fill="#f3d9bd"/>
+    <path d="M70 78 C72 54 128 54 130 78 C120 66 80 66 70 78Z" fill="#2a2018"/>
+    <circle cx="150" cy="150" r="22" fill="#fff7e0"/>
+    <circle cx="150" cy="150" r="14" fill="none" stroke="#2a2018" stroke-width="4"/>
+    <circle cx="150" cy="150" r="5" fill="#f59e0b"/>
+  </g>
+</svg>

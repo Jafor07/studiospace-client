@@ -3,7 +3,8 @@
 **Peer-to-peer creative workspace and production studio sharing platform.**
 Studio owners list photo studios, sound stages, podcast lounges, music suites and art workshops. Creators discover them, check pricing, and book hourly slots.
 
-**Live site:** Not deployed yet — deploy the client and replace this line with its live URL before submission.
+**Live site:** https://studiospace-client-sand-seven.vercel.app
+**Live API:** https://studiospace-server-rouge.vercel.app
 **Client repository:** https://github.com/Jafor07/studiospace-client
 **Server repository:** https://github.com/Jafor07/studiospace-server
 
@@ -34,6 +35,7 @@ Studio owners list photo studios, sound stages, podcast lounges, music suites an
 | Backend | Express.js, jose (JWT verification) |
 | Database | MongoDB Atlas |
 | Hosting | Vercel |
+| Photos | Free stock photos from [Pexels](https://www.pexels.com) |
 
 ## Run it locally
 
