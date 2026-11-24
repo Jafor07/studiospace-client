@@ -48,11 +48,51 @@ Studio owners list photo studios, sound stages, podcast lounges, music suites an
 
 ## Examiner test accounts
 
-These accounts are not created automatically. Before evaluation, register both through the deployed app (or ensure they exist in its BetterAuth database). Then run `npm run seed -- host@studiospace.com "Studio Host"` from the server folder so the sample listings belong to the host account.
+Register both accounts on the live site before evaluation — they are not created automatically. Then seed the database so the sample studios belong to the host account.
 
 | Role | Email | Password |
 |---|---|---|
 | Guest (books studios) | `guest@studiospace.com` | `Guest1234` |
 | Host (owns the sample studios) | `host@studiospace.com` | `Host1234` |
 
-Tip: log in as the guest in one browser and the host in another to try the whole flow: book a studio, confirm it from the host's **Dashboard**, then try to book the same time with a different account to see double-booking protection.
+### Examiner testing workflow
+
+**1. Create the accounts** (order matters: host first)
+
+On the live site (`https://studiospace-client-sand-seven.vercel.app`):
+
+1. Register as `host@studiospace.com` / `Host1234` — this becomes the studio owner.
+2. Register as `guest@studiospace.com` / `Guest1234` — this becomes the booker.
+
+**2. Seed the sample studios (host only)**
+
+From the server folder, run:
+
+```
+npm run seed -- host@studiospace.com "Studio Host"
+```
+
+This creates 8 sample studios (photo, film stage, podcast, music, workshop) owned by `host@studiospace.com`. They appear on the home page, the Explore Studios page, and the host's `/my-listings`.
+
+**3. Test the complete booking workflow** (two browser sessions)
+
+| Step | Browser A (Guest) | Browser B (Host) |
+|---|---|---|
+| 1 | Log in as `guest@studiospace.com` | Log in as `host@studiospace.com` |
+| 2 | Open a studio details page and click **Book Workspace Now** | — |
+| 3 | Pick a date/time and send the request → status becomes **Pending** | — |
+| 4 | — | Open **Dashboard** → **Booking requests** → click **Confirm** |
+| 5 | Booking status changes to **Confirmed** | — |
+| 6 | Try booking the same studio at the same time → server rejects with **409 conflict** | — |
+| 7 | Open **My Bookings** → click **Download Invoice** → PDF downloads | — |
+
+**4. Test private-route reloads**
+
+While logged in as either account, open and reload each of these pages — none should redirect to `/login`:
+
+- `/dashboard`
+- `/my-listings`
+- `/my-bookings`
+- `/studios/edit/[id]` (open one of your own studio listings first)
+
+**Tip:** Use two separate browsers (or incognito windows) so the guest and host sessions don't interfere with each other.
