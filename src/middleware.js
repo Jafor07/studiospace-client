@@ -3,7 +3,7 @@ import { auth } from "@/app/lib/auth";
 
 // Runs before every private page below. A visitor without a session is sent
 // to /login and brought back to the page they wanted after logging in.
-export async function proxy(request) {
+export async function middleware(request) {
   const session = await auth.api.getSession({
     headers: request.headers,
   });
